@@ -31,9 +31,8 @@ def get_itemized_news(url):
     return items[:20]
 
 
-@app.route('/', methods=['GET'])
-def index():
-    items = get_itemized_news(BASE_URL.format('nyheter'))
+def render_template_for_category(category='nyheter'):
+    items = get_itemized_news(BASE_URL.format(category))
     categories = [
         {
             'name': name,
@@ -54,31 +53,16 @@ def index():
         categories=categories,
         items=items
     )
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template_for_category()
 
 
 @app.route('/<cat>', methods=['GET'])
 def category(cat):
-    items = get_itemized_news(BASE_URL.format(cat))
-    categories = [
-        {
-            'name': name,
-            'url': url_for('category', cat=name.lower()),
-        } for name in CATEGORIES
-    ]
-
-    return render_template(
-        'index.html',
-        style=url_for('static', filename='style.css'),
-        constr=url_for('static', filename='img/construction.gif'),
-        menu=url_for('static', filename='img/menu.gif'),
-        home=url_for('static', filename='img/home.gif'),
-        home_url=url_for('index'),
-        mail=url_for('static', filename='img/mail.gif'),
-        mail_url='http://bubb.la',
-        anacap=url_for('static', filename='img/anacapflag.jpg'),
-        categories=categories,
-        items=items
-    )
+    return render_template_for_category(category=cat)
 
 
 if __name__ == '__main__':
