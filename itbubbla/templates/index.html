@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <title>IT-bubb.la</title>
+        <link href="{{ style }}" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <script>
+            toggleItem = function(){
+                var el = document.getElementsByTagName('blink')[0];
+                if (el.style.display === 'block') {
+                    el.style.display = 'none';
+                } else {
+                    el.style.display = 'block';
+                }
+            }
+            setInterval(toggleItem, 600);
+        </script>
+        <table border="1" style="width:100%" id="main">
+            <tr>
+                <th colspan="2" id="top">
+                    <p><blink>BUBB.LA</blink></p>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2" id="ana">
+                    <img src="{{ anacap }}"/>
+                </th>
+            </tr>
+            <tr>
+                <td id="nav">
+                    <img src="{{ menu }}"/>
+                    <ul>
+                        {% for cat in categories %}
+                        <li><a href="{{ cat.url }}">{{ cat.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ home_url }}"><img src="{{ home }}"/></a>
+                    <a href="{{ mail_url }}"><img src="{{ mail }}"/></a>
+                </td>
+                <td id="content">
+                    <p align="center"><img src="{{ constr }}"/></p>
+                    <dl>
+                        {% for item in items %}
+                        <dt><a href="{{ item.url }}">{{ item.title }}</a></dt>
+                        <dd>- {{item.category}}: {{ item.date }}<dd>
+                        {% endfor %}
+                    </dl>
+                    <p align="center"><img src="{{ constr }}"/></p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
+
+
