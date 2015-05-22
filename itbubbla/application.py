@@ -7,13 +7,16 @@ from flask import Flask, render_template, url_for
 app = Flask(__name__)
 
 BASE_URL = 'http://bubb.la/rss/{}'
+CATEGORIES_URL = 'http://bubb.la/rss_feeds.json'
 
-CATEGORIES = [
-    u'Varlden', u'Sverige', u'Blandat',
-    u'Media', u'Politik', u'Opinion',
-    u'Europa', u'Amerika', u'Asien',
-    u'Ekonomi', u'Teknik', u'Vetenskap'
-]
+
+def get_categories():
+    cats = requests.get(CATEGORIES_URL).json()
+    return [
+        {
+            'name': key,
+            'url': url_for('category', cat=value.split('/')[-1])
+        } for key, value in cats.iteritems()]
 
 
 def get_itemized_news(url):
@@ -33,12 +36,7 @@ def get_itemized_news(url):
 
 def render_template_for_category(category='nyheter'):
     items = get_itemized_news(BASE_URL.format(category))
-    categories = [
-        {
-            'name': name,
-            'url': url_for('category', cat=name.lower()),
-        } for name in CATEGORIES
-    ]
+    categories = get_categories()
 
     return render_template(
         'index.html',
